@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting" xmlns:data-mapper="http://www.mulesoft.org/schema/mule/ee/data-mapper" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:jdbc-ee="http://www.mulesoft.org/schema/mule/ee/jdbc" xmlns:ajax="http://www.mulesoft.org/schema/mule/ajax" xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:spring="http://www.springframework.org/schema/beans" version="EE-3.4.1"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd
+http://www.mulesoft.org/schema/mule/ajax http://www.mulesoft.org/schema/mule/ajax/current/mule-ajax.xsd
+http://www.mulesoft.org/schema/mule/ee/jdbc http://www.mulesoft.org/schema/mule/ee/jdbc/current/mule-jdbc-ee.xsd
+http://www.mulesoft.org/schema/mule/ee/data-mapper http://www.mulesoft.org/schema/mule/ee/data-mapper/current/mule-data-mapper.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd
+http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd">
+    <data-mapper:config name="csv_to_pojo" transformationGraphPath="csv_to_pojo.grf" doc:name="csv_to_pojo"/>
+    <flow name="integracao-acspFlow1" doc:name="integracao-acspFlow1">
+        <file:inbound-endpoint path="C:\tmp" moveToDirectory="C:\tmp\DONE_ACSP" responseTimeout="10000" doc:name="File">
+            <file:filename-regex-filter pattern="FakeNameGenerator.com_e675ac9e" caseSensitive="true"/>
+        </file:inbound-endpoint>
+        <logger message="payload" level="INFO" doc:name="Logger"/>
+        <data-mapper:transform config-ref="csv_to_pojo" doc:name="CSV To Pojo"/>
+        <scripting:component doc:name="Script">
+            <scripting:script engine="Groovy"/>
+        </scripting:component>
+        <logger message="output" level="INFO" doc:name="Logger"/>
+    </flow>
+</mule>

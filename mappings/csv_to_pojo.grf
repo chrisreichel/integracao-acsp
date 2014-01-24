@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?><Graph author="christian.reichel" created="Fri Jan 24 15:32:38 GMT 2014" description="CSV To Pojo" guiVersion="3.4.3.P" id="1390579886847" licenseCode="Unlicensed" licenseType="Unknown" modified="Fri Jan 24 15:32:38 GMT 2014" modifiedBy="christian.reichel" name="CSV_To_Pojo" preview-file="C:/tmp/FakeNameGenerator.com_e675ac9e.csv" revision="1.0" showComponentDetails="false">
+<Global>
+<Metadata __referenceCounter="1" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _type="Input" id="1120508c-159d-4d3a-9e5e-4726a64523ad">
+<Record fieldDelimiter="," name="FakeNameGenerator_com_gaic9e" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field containerType="SINGLE" label="ï»¿Number" name="iNumber" size="10" type="string"/>
+<Field containerType="SINGLE" label="Gender" name="Gender" size="10" type="string"/>
+<Field containerType="SINGLE" label="GivenName" name="GivenName" size="10" type="string"/>
+<Field containerType="SINGLE" label="MiddleInitial" name="MiddleInitial" size="10" type="string"/>
+<Field containerType="SINGLE" label="Surname" name="Surname" size="10" type="string"/>
+<Field containerType="SINGLE" label="StreetAddress" name="StreetAddress" size="10" type="string"/>
+<Field containerType="SINGLE" label="City" name="City" size="10" type="string"/>
+<Field containerType="SINGLE" label="State" name="State" size="10" type="string"/>
+<Field containerType="SINGLE" label="ZipCode" name="ZipCode" size="10" type="string"/>
+<Field containerType="SINGLE" label="EmailAddress" name="EmailAddress" size="10" type="string"/>
+<Field containerType="SINGLE" label="Username" name="Username" size="10" type="string"/>
+<Field containerType="SINGLE" label="Password" name="Password" size="10" type="string"/>
+<Field containerType="SINGLE" label="TelephoneNumber" name="TelephoneNumber" size="10" type="string"/>
+<Field containerType="SINGLE" label="Birthday" name="Birthday" size="10" type="string"/>
+<Field containerType="SINGLE" label="CCType" name="CCType" size="10" type="string"/>
+<Field containerType="SINGLE" label="CCNumber" name="CCNumber" size="10" type="string"/>
+<Field containerType="SINGLE" label="CVV2" name="CVV2" size="10" type="string"/>
+<Field containerType="SINGLE" label="CCExpires" name="CCExpires" size="10" type="string"/>
+<Field containerType="SINGLE" label="NationalID" name="NationalID" size="10" type="string"/>
+<Field containerType="SINGLE" label="UPS" name="UPS" size="10" type="string"/>
+<Field containerType="SINGLE" label="Company" name="Company" size="10" type="string"/>
+<Field containerType="SINGLE" eofAsDelimiter="true" label="Vehicle" name="Vehicle" size="10" type="string"/>
+<Field __artificialType="_id" auto_filling="global_row_count" name="__id" type="long"/>
+</Record>
+</Metadata>
+<Metadata __index="0" __referenceCounter="1" __sourcePath="{}/list" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _id="__id" _type="Output" id="70386bc0-5bad-48e7-ae3d-87bb52f3be3f">
+<Record fieldDelimiter="," name="list" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __index="0" __sourcePath="{}/list/birthday" containerType="SINGLE" label="birthday" name="birthday" type="date"/>
+<Field __index="1" __sourcePath="{}/list/cCNumber" containerType="SINGLE" label="cCNumber" name="cCNumber" type="string"/>
+<Field __index="2" __sourcePath="{}/list/ccExpires" containerType="SINGLE" label="ccExpires" name="ccExpires" type="string"/>
+<Field __index="3" __sourcePath="{}/list/ccType" containerType="SINGLE" label="ccType" name="ccType" type="string"/>
+<Field __index="4" __sourcePath="{}/list/city" containerType="SINGLE" label="city" name="city" type="string"/>
+<Field __index="5" __sourcePath="{}/list/company" containerType="SINGLE" label="company" name="company" type="string"/>
+<Field __index="6" __sourcePath="{}/list/cvv2" containerType="SINGLE" label="cvv2" name="cvv2" type="string"/>
+<Field __index="7" __sourcePath="{}/list/emailAddress" containerType="SINGLE" label="emailAddress" name="emailAddress" type="string"/>
+<Field __index="8" __sourcePath="{}/list/gender" containerType="SINGLE" label="gender" name="gender" type="string"/>
+<Field __index="9" __sourcePath="{}/list/givenName" containerType="SINGLE" label="givenName" name="givenName" type="string"/>
+<Field __index="10" __sourcePath="{}/list/middleInitial" containerType="SINGLE" label="middleInitial" name="middleInitial" type="string"/>
+<Field __index="11" __sourcePath="{}/list/nationalID" containerType="SINGLE" label="nationalID" name="nationalID" type="string"/>
+<Field __index="12" __sourcePath="{}/list/number" containerType="SINGLE" label="number" name="number" type="string"/>
+<Field __index="13" __sourcePath="{}/list/password" containerType="SINGLE" label="password" name="password" type="string"/>
+<Field __index="14" __sourcePath="{}/list/state" containerType="SINGLE" label="state" name="state" type="string"/>
+<Field __index="15" __sourcePath="{}/list/streetAddress" containerType="SINGLE" label="streetAddress" name="streetAddress" type="string"/>
+<Field __index="16" __sourcePath="{}/list/surname" containerType="SINGLE" label="surname" name="surname" type="string"/>
+<Field __index="17" __sourcePath="{}/list/telephoneNumber" containerType="SINGLE" label="telephoneNumber" name="telephoneNumber" type="string"/>
+<Field __index="18" __sourcePath="{}/list/ups" containerType="SINGLE" label="ups" name="ups" type="string"/>
+<Field __index="19" __sourcePath="{}/list/username" containerType="SINGLE" label="username" name="username" type="string"/>
+<Field __index="20" __sourcePath="{}/list/vehicle" containerType="SINGLE" label="vehicle" name="vehicle" type="string"/>
+<Field __index="21" __sourcePath="{}/list/zipCode" containerType="SINGLE" label="zipCode" name="zipCode" type="string"/>
+</Record>
+</Metadata>
+<Dictionary>
+<Entry id="DictionaryEntry0" input="true" name="inputPayload" output="false" type="object"/>
+<Entry id="DictionaryEntry1" input="false" name="outputPayload" output="true" type="object"/>
+</Dictionary>
+</Global>
+<Phase number="0">
+<Node cacheInMemory="true" enabled="enabled" fileURL="dict:outputPayload" guiName="Pojo WRITER" guiX="900" guiY="20" id="BEAN_WRITER0" type="BEAN_WRITER">
+<attr name="mapping"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<clover:collection clover:name="list" xmlns:clover="http://www.cloveretl.com/ns/xmlmapping">
+  <item clover:inPort="0">
+    <birthday>$0.birthday</birthday>
+    <cCNumber>$0.cCNumber</cCNumber>
+    <ccExpires>$0.ccExpires</ccExpires>
+    <ccType>$0.ccType</ccType>
+    <city>$0.city</city>
+    <company>$0.company</company>
+    <cvv2>$0.cvv2</cvv2>
+    <emailAddress>$0.emailAddress</emailAddress>
+    <gender>$0.gender</gender>
+    <givenName>$0.givenName</givenName>
+    <middleInitial>$0.middleInitial</middleInitial>
+    <nationalID>$0.nationalID</nationalID>
+    <number>$0.number</number>
+    <password>$0.password</password>
+    <state>$0.state</state>
+    <streetAddress>$0.streetAddress</streetAddress>
+    <surname>$0.surname</surname>
+    <telephoneNumber>$0.telephoneNumber</telephoneNumber>
+    <ups>$0.ups</ups>
+    <username>$0.username</username>
+    <vehicle>$0.vehicle</vehicle>
+    <zipCode>$0.zipCode</zipCode>
+  </item>
+</clover:collection>]]></attr>
+<attr name="_data_format"><![CDATA[JAVA]]></attr>
+<attr name="schema"><![CDATA[<?xml version="1.0" encoding="UTF-8"?><schema-object>
+  <schema-collection>
+    <typed-object-ref type-ref="br.net.acsp.bean.FakeUser"/>
+  </schema-collection>
+  <typed-object type="java.lang.String"/>
+  <typed-object type="java.util.Date"/>
+  <typed-object type="br.net.acsp.bean.FakeUser">
+    <typed-object-ref name="birthday" type-ref="java.util.Date"/>
+    <typed-object-ref name="cCNumber" type-ref="java.lang.String"/>
+    <typed-object-ref name="ccExpires" type-ref="java.lang.String"/>
+    <typed-object-ref name="ccType" type-ref="java.lang.String"/>
+    <typed-object-ref name="city" type-ref="java.lang.String"/>
+    <typed-object-ref name="company" type-ref="java.lang.String"/>
+    <typed-object-ref name="cvv2" type-ref="java.lang.String"/>
+    <typed-object-ref name="emailAddress" type-ref="java.lang.String"/>
+    <typed-object-ref name="gender" type-ref="java.lang.String"/>
+    <typed-object-ref name="givenName" type-ref="java.lang.String"/>
+    <typed-object-ref name="middleInitial" type-ref="java.lang.String"/>
+    <typed-object-ref name="nationalID" type-ref="java.lang.String"/>
+    <typed-object-ref name="number" type-ref="java.lang.String"/>
+    <typed-object-ref name="password" type-ref="java.lang.String"/>
+    <typed-object-ref name="state" type-ref="java.lang.String"/>
+    <typed-object-ref name="streetAddress" type-ref="java.lang.String"/>
+    <typed-object-ref name="surname" type-ref="java.lang.String"/>
+    <typed-object-ref name="telephoneNumber" type-ref="java.lang.String"/>
+    <typed-object-ref name="ups" type-ref="java.lang.String"/>
+    <typed-object-ref name="username" type-ref="java.lang.String"/>
+    <typed-object-ref name="vehicle" type-ref="java.lang.String"/>
+    <typed-object-ref name="zipCode" type-ref="java.lang.String"/>
+  </typed-object>
+</schema-object>
+]]></attr>
+</Node>
+<Node charset="UTF-8" enabled="enabled" fileURL="dict:inputPayload" guiName="CSV READER" guiX="20" guiY="20" id="DATA_READER0" quotedStrings="true" skipRows="1" trim="true" type="DATA_READER">
+<attr name="_data_format"><![CDATA[CSV]]></attr>
+<attr name="__dataSourceDefinition"><![CDATA[C:/tmp/FakeNameGenerator.com_e675ac9e.csv]]></attr>
+</Node>
+<Node enabled="enabled" guiName="Foreach 'FakeNameGenerator_com_gaic9e' -&gt; 'list'" guiX="460" guiY="20" id="FOREACH_FAKE_NAME_GENERATOR_COM_GAIC9E_LIST" transformClass="com.mulesoft.datamapper.transform.MelRecordTransform" type="REFORMAT">
+<attr name="melScript"><![CDATA[//MEL
+//START -> DO NOT REMOVE
+output.__id = (isnull(input.__id) ? null : num2str(input.__id));
+//END -> DO NOT REMOVE
+output.gender = input.Gender;
+output.givenName = input.GivenName;
+output.middleInitial = input.MiddleInitial;
+output.surname = input.Surname;
+output.streetAddress = input.StreetAddress;
+output.city = input.City;
+output.state = input.State;
+output.zipCode = input.ZipCode;
+output.emailAddress = input.EmailAddress;
+output.username = input.Username;
+output.password = input.Password;
+output.telephoneNumber = input.TelephoneNumber;
+output.birthday = (isnull(input.Birthday) ? null : str2date(input.Birthday, "yyyy/MM/dd"));
+output.ccType = input.CCType;
+output.cCNumber = input.CCNumber;
+output.cvv2 = input.CVV2;
+output.ccExpires = input.CCExpires;
+output.nationalID = input.NationalID;
+output.ups = input.UPS;
+output.company = input.Company;
+output.vehicle = input.Vehicle;
+]]></attr>
+</Node>
+<Edge debugMode="true" fromNode="DATA_READER0:0" guiBendpoints="" id="Edge0" inPort="Port 0 (in)" metadata="1120508c-159d-4d3a-9e5e-4726a64523ad" outPort="Port 0 (output)" toNode="FOREACH_FAKE_NAME_GENERATOR_COM_GAIC9E_LIST:0"/>
+<Edge debugMode="true" fromNode="FOREACH_FAKE_NAME_GENERATOR_COM_GAIC9E_LIST:0" guiBendpoints="" id="Edge1" inPort="Port 0 (in)" metadata="70386bc0-5bad-48e7-ae3d-87bb52f3be3f" outPort="Port 0 (out)" toNode="BEAN_WRITER0:0"/>
+</Phase>
+</Graph>

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mule-configuration xmlns="http://www.mulesoft.com/tooling/messageflow" name="integracao-acsp">
+    <global-element name="csv_to_pojo" type="http://www.mulesoft.org/schema/mule/ee/data-mapper/config" entity-id="!!!3d540c12-43f9-4ea1-aee0-c5ceed82267b">
+        <properties>
+            <property name="doc:description" value="CSV To Pojo"/>
+            <property name="name" value="csv_to_pojo"/>
+            <property name="doc:name" value="csv_to_pojo"/>
+            <property name="transformationGraphPath" value="csv_to_pojo.grf"/>
+        </properties>
+    </global-element>
+    <flow SubFlow="false" name="integracao-acspFlow1" type="http://www.mulesoft.org/schema/mule/core/flow" entity-id="a67c32af-bbcb-4872-a1f9-38add9417561">
+        <properties>
+            <property name="processingStrategy2" value=""/>
+            <property name="initialState" value=""/>
+            <property name="auxiliary;erased;initialState" value="true"/>
+            <property name="bussinessEventsLabel" value=""/>
+            <property name="tracking:enable-default-events" value="false"/>
+            <property name="auxiliary;erased;processingStrategy2" value="true"/>
+            <property name="auxiliary;index" value="1"/>
+            <property name="updated"/>
+            <property-collection name="@http://www.mulesoft.org/schema/mule/ee/tracking/transaction;499624244">
+                <property name="id" value=""/>
+                <property name="isProcessed$$$$ " value="true"/>
+            </property-collection>
+        </properties>
+        <description></description>
+        <lane hadOnlyOneElement="false" index="0" isChoiceOtherwiseLane="false" entity-id="compartment-lane#1">
+            <graphicalData x="0" y="0" width="0" height="0"/>
+            <endpoint direction="Inbound" message-exchange-pattern="OneWay" name="File" type="http://www.mulesoft.org/schema/mule/file/endpoint" entity-id="File#1">
+                <graphicalData x="21" y="193" width="68" height="67"/>
+                <properties>
+                    <property name="reverseOrder"/>
+                    <property name="moveToPattern"/>
+                    <property name="pollingFrequency"/>
+                    <property name="businessEventsLabel"/>
+                    <property name="comparator"/>
+                    <property name="disableTransportTransformer"/>
+                    <property name="exchange-pattern" value="one-way"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property name="ref"/>
+                    <property name="transformer-refs"/>
+                    <property name="moveToDirectory" value="C:\tmp\DONE_ACSP"/>
+                    <property name="address"/>
+                    <property name="fileAge"/>
+                    <property name="path" value="C:\tmp"/>
+                    <property name="encoding"/>
+                    <property name="outputPattern"/>
+                    <property name="auxiliary;index" value="2"/>
+                    <property name="mimeType"/>
+                    <property name="responseTimeout" value="10000"/>
+                    <property name="connector-ref"/>
+                    <property-collection name="@http://www.mulesoft.org/schema/mule/file/filename-regex-filter;0">
+                        <property name="pattern" value="FakeNameGenerator.com_e675ac9e"/>
+                        <property name="caseSensitive" value="true"/>
+                        <property name="isProcessed$$$$ " value="true"/>
+                        <property name="auxiliary;index" value="3"/>
+                        <property name="auxiliary;wrapIn" value="3"/>
+                    </property-collection>
+                </properties>
+                <description></description>
+            </endpoint>
+            <pattern name="Logger" type="http://www.mulesoft.org/schema/mule/core/logger" entity-id="72ddf950-0ee1-4e07-a628-6a075739af90">
+                <graphicalData x="149" y="193" width="68" height="67"/>
+                <properties>
+                    <property name="message" value="payload"/>
+                    <property name="category" value=""/>
+                    <property name="level" value="INFO"/>
+                    <property name="updated"/>
+                </properties>
+                <description></description>
+            </pattern>
+            <pattern name="CSV To Pojo" type="http://www.mulesoft.org/schema/mule/ee/data-mapper/data-mapper-connector" entity-id="80abdc53-f1e5-42e7-bbcf-e22713415da3">
+                <graphicalData x="277" y="193" width="72" height="67"/>
+                <properties>
+                    <property name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute" value="http://www.mulesoft.org/schema/mule/ee/data-mapper/transform"/>
+                    <property name="config-ref" value="csv_to_pojo"/>
+                </properties>
+            </pattern>
+            <pattern name="Script" type="http://www.mulesoft.org/schema/mule/scripting/component" entity-id="466388cb-e30f-42d1-beac-b28ca90ff049">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="updated"/>
+                    <property-collection name="@http://www.mulesoft.org/schema/mule/core/refInterceptorStackType;1107963389">
+                        <property name="ref" value=""/>
+                        <property name="isProcessed$$$$ " value="true"/>
+                    </property-collection>
+                    <property-collection name="@http://www.mulesoft.org/schema/mule/scripting/script;1290574927">
+                        <property name="text" value=""/>
+                        <property name="engine" value="Groovy"/>
+                        <property name="isProcessed$$$$ " value="true"/>
+                    </property-collection>
+                </properties>
+                <description></description>
+            </pattern>
+            <pattern name="Logger" type="http://www.mulesoft.org/schema/mule/core/logger" entity-id="e03e2836-0c59-4c50-ba78-2c1aad813679">
+                <graphicalData x="409" y="193" width="68" height="67"/>
+                <properties>
+                    <property name="message" value="output"/>
+                    <property name="category" value=""/>
+                    <property name="level" value="INFO"/>
+                    <property name="updated"/>
+                </properties>
+                <description></description>
+            </pattern>
+        </lane>
+    </flow>
+</mule-configuration>

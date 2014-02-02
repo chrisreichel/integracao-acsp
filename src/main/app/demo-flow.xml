@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:tcp="http://www.mulesoft.org/schema/mule/tcp"
+	xmlns:mulexml="http://www.mulesoft.org/schema/mule/xml" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:cxf="http://www.mulesoft.org/schema/mule/cxf" xmlns:data-mapper="http://www.mulesoft.org/schema/mule/ee/data-mapper"
+	xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking"
+	xmlns:jms="http://www.mulesoft.org/schema/mule/jms" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:spring="http://www.springframework.org/schema/beans" version="EE-3.4.1"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd
+http://www.mulesoft.org/schema/mule/ee/data-mapper http://www.mulesoft.org/schema/mule/ee/data-mapper/current/mule-data-mapper.xsd
+http://www.mulesoft.org/schema/mule/cxf http://www.mulesoft.org/schema/mule/cxf/current/mule-cxf.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/tcp http://www.mulesoft.org/schema/mule/tcp/current/mule-tcp.xsd
+http://www.mulesoft.org/schema/mule/xml http://www.mulesoft.org/schema/mule/xml/current/mule-xml.xsd">
+	<jms:endpoint name="ActiveMQ"
+		tracking:enable-default-events="true" address="tcp://10.211.55.5:61616"
+		doc:name="JMS" />
+
+	<jms:activemq-connector name="jmsConnector"
+		brokerURL="tcp://10.211.55.5:61616" doc:name="Active MQ" />
+	<jms:activemq-xa-connector name="jmsXAConnector"
+		brokerURL="tcp://10.211.55.5:61616" doc:name="Active MQ" />
+	<data-mapper:config name="csv_to_pojo_1"
+		transformationGraphPath="csv_to_pojo_1.grf" doc:name="csv_to_pojo_1" />
+	<cxf:configuration name="CXF_Configuration"
+		enableMuleSoapHeaders="true" initializeStaticBusInstance="true"
+		doc:name="CXF Configuration" />
+	<data-mapper:config name="csv_to_pojo"
+		transformationGraphPath="csv_to_pojo.grf" doc:name="csv_to_pojo" />
+	<mulexml:jaxb-context name="JAXB_Context"
+		packageNames="br.net.reichel.mock.client" doc:name="JAXB Context" />
+	<data-mapper:config name="xml_to_pojo"
+		transformationGraphPath="xml_to_pojo.grf" doc:name="xml_to_pojo" />
+
+	<flow name="queued-proposals" doc:name="queued-proposals">
+
+		<jms:inbound-endpoint queue="financeIn"
+			connector-ref="jmsConnector" doc:name="JMS"
+			tracking:enable-default-events="true" />
+		<payload-type-filter expectedType="java.lang.String"
+			doc:name="Payload" />
+		<regex-filter pattern="^\w+\|\w+\|" doc:name="Regex" />
+		<data-mapper:transform config-ref="csv_to_pojo"
+			doc:name="CSV To Pojo" />
+		<logger message="What arrived: #[payload] and #[flowVars]"
+			level="INFO" doc:name="Logger" />
+		<cxf:jaxws-client wsdlLocation="classpath:/wsdl/fraudDetection.wsdl"
+			operation="detectFraud" doc:name="SOAP"
+			clientClass="br.net.reichel.mock.client.FinanceApplicationService"
+			port="FinanceApplicationPort">
+			<cxf:inInterceptors>
+				<spring:bean class="org.apache.cxf.interceptor.LoggingInInterceptor" />
+			</cxf:inInterceptors>
+			<cxf:outInterceptors>
+				<spring:bean class="org.apache.cxf.interceptor.LoggingOutInterceptor" />
+			</cxf:outInterceptors>
+		</cxf:jaxws-client>
+		<http:outbound-endpoint exchange-pattern="request-response"
+			host="10.211.55.5" port="8080" path="fraud-experts/services/fraudDetection"
+			method="POST" doc:name="HTTP" />
+		<mulexml:dom-to-xml-transformer
+			outputEncoding="UTF-8" doc:name="DOM to XML" />
+		<data-mapper:transform config-ref="xml_to_pojo"
+			doc:name="XML To Pojo" />
+		<logger message="Response to call: #[payload.status]" level="INFO"
+			doc:name="Logger" />
+		<choice doc:name="Choice" tracking:enable-default-events="true">
+			<when expression="payload.status == 'Approved'" evaluator="groovy">
+				<tcp:outbound-endpoint exchange-pattern="request-response"
+					host="10.211.55.5" port="6667" responseTimeout="10000" doc:name="TCP" />
+			</when>
+			<otherwise>
+				<jms:outbound-endpoint queue=" financeOut"
+					connector-ref="jmsConnector" doc:name="JMS" />
+			</otherwise>
+		</choice>
+	</flow>
+
+</mule>

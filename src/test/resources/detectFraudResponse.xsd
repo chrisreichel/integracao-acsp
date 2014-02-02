@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://finance.reichel.net.br/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="detectFraudResponse" type="fin:detectFraudResponseType" xmlns:fin="http://finance.reichel.net.br/"/>
+  <xs:complexType name="detectFraudResponseType">
+    <xs:sequence>
+      <xs:element ref="return"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

@@ -84,6 +84,14 @@
                             <groupId>org.mule.transports</groupId>
                             <artifactId>mule-transport-ajax</artifactId>
                         </inclusion>
+                    <inclusion>
+                            <groupId>org.mule.modules</groupId>
+                            <artifactId>mule-module-sqs</artifactId>
+                        </inclusion>
+                    <inclusion>
+                            <groupId>org.mule.transports</groupId>
+                            <artifactId>mule-transport-tcp</artifactId>
+                        </inclusion>
                     </inclusions>
                 </configuration>
 			</plugin>
@@ -287,6 +295,12 @@
 	<!-- Mule Dependencies -->
 	<dependencies>
 		<dependency>
+			<groupId>org.apache.activemq</groupId>
+			<artifactId>activemq-all</artifactId>
+			<version>5.9.0</version>
+		</dependency>
+            
+		<dependency>
 			<groupId>org.mule</groupId>
 			<artifactId>mule-core</artifactId>
 			<version>${mule.version}</version>
@@ -439,6 +453,17 @@
     <dependency>
             <groupId>org.mule.transports</groupId>
             <artifactId>mule-transport-ajax</artifactId>
+            <version>${mule.version}</version>
+            <scope>provided</scope>
+        </dependency>
+    <dependency>
+            <groupId>org.mule.modules</groupId>
+            <artifactId>mule-module-sqs</artifactId>
+            <version>2.4.3</version>
+        </dependency>
+    <dependency>
+            <groupId>org.mule.transports</groupId>
+            <artifactId>mule-transport-tcp</artifactId>
             <version>${mule.version}</version>
             <scope>provided</scope>
         </dependency>

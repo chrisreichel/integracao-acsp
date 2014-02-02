@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="UTF-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ns2:detectFraudResponse xmlns:ns2="http://finance.reichel.net.br/"><return><status>Derive</status><description>Be aware of brazilians!</description></return></ns2:detectFraudResponse></soap:Body></soap:Envelope>

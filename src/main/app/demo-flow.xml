@@ -37,6 +37,13 @@ http://www.mulesoft.org/schema/mule/xml http://www.mulesoft.org/schema/mule/xml/
 	<data-mapper:config name="xml_to_pojo"
 		transformationGraphPath="xml_to_pojo.grf" doc:name="xml_to_pojo" />
 
+	<tcp:connector name="tcpConnector" receiveBufferSize="1024"
+		receiveBacklog="50"  reuseAddress="true"
+		clientSoTimeout="0" serverSoTimeout="0" socketSoLinger="0"
+		 keepAlive="true" doc:name="TCP connector">
+		<tcp:direct-protocol payloadOnly="true" rethrowExceptionOnRead="true" />
+	</tcp:connector>
+
 	<flow name="queued-proposals" doc:name="queued-proposals">
 
 		<jms:inbound-endpoint queue="financeIn"
@@ -45,6 +52,8 @@ http://www.mulesoft.org/schema/mule/xml http://www.mulesoft.org/schema/mule/xml/
 		<payload-type-filter expectedType="java.lang.String"
 			doc:name="Payload" />
 		<regex-filter pattern="^\w+\|\w+\|" doc:name="Regex" />
+		<set-variable variableName="originalPayload" value="#[message.payload]"
+			doc:name="Variable" />
 		<data-mapper:transform config-ref="csv_to_pojo"
 			doc:name="CSV To Pojo" />
 		<logger message="What arrived: #[payload] and #[flowVars]"
@@ -71,8 +80,16 @@ http://www.mulesoft.org/schema/mule/xml http://www.mulesoft.org/schema/mule/xml/
 			doc:name="Logger" />
 		<choice doc:name="Choice" tracking:enable-default-events="true">
 			<when expression="payload.status == 'Approved'" evaluator="groovy">
+				<set-payload value="#[originalPayload]" doc:name="Set Payload"></set-payload>
+
 				<tcp:outbound-endpoint exchange-pattern="request-response"
-					host="10.211.55.5" port="6667" responseTimeout="10000" doc:name="TCP" />
+					connector-ref="tcpConnector" host="10.211.55.5" port="6667"
+					responseTimeout="10000" doc:name="TCP"
+					tracking:enable-default-events="true">
+				</tcp:outbound-endpoint>
+                <byte-array-to-object-transformer doc:name="Byte Array to Object"/>
+
+				<logger message="What? #[payload]" level="INFO" doc:name="Logger" />
 			</when>
 			<otherwise>
 				<jms:outbound-endpoint queue=" financeOut"

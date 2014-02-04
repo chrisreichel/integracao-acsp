@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:tcp="http://www.mulesoft.org/schema/mule/tcp"
-	xmlns:mulexml="http://www.mulesoft.org/schema/mule/xml" xmlns:http="http://www.mulesoft.org/schema/mule/http"
-	xmlns:cxf="http://www.mulesoft.org/schema/mule/cxf" xmlns:data-mapper="http://www.mulesoft.org/schema/mule/ee/data-mapper"
+<mule xmlns:jdbc-ee="http://www.mulesoft.org/schema/mule/ee/jdbc"
+	xmlns:tcp="http://www.mulesoft.org/schema/mule/tcp" xmlns:mulexml="http://www.mulesoft.org/schema/mule/xml"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:cxf="http://www.mulesoft.org/schema/mule/cxf"
+	xmlns:data-mapper="http://www.mulesoft.org/schema/mule/ee/data-mapper"
 	xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking"
 	xmlns:jms="http://www.mulesoft.org/schema/mule/jms" xmlns="http://www.mulesoft.org/schema/mule/core"
 	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
@@ -16,7 +17,8 @@ http://www.mulesoft.org/schema/mule/ee/data-mapper http://www.mulesoft.org/schem
 http://www.mulesoft.org/schema/mule/cxf http://www.mulesoft.org/schema/mule/cxf/current/mule-cxf.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
 http://www.mulesoft.org/schema/mule/tcp http://www.mulesoft.org/schema/mule/tcp/current/mule-tcp.xsd
-http://www.mulesoft.org/schema/mule/xml http://www.mulesoft.org/schema/mule/xml/current/mule-xml.xsd">
+http://www.mulesoft.org/schema/mule/xml http://www.mulesoft.org/schema/mule/xml/current/mule-xml.xsd
+http://www.mulesoft.org/schema/mule/ee/jdbc http://www.mulesoft.org/schema/mule/ee/jdbc/current/mule-jdbc-ee.xsd">
 	<jms:endpoint name="ActiveMQ"
 		tracking:enable-default-events="true" address="tcp://10.211.55.5:61616"
 		doc:name="JMS" />
@@ -38,13 +40,20 @@ http://www.mulesoft.org/schema/mule/xml http://www.mulesoft.org/schema/mule/xml/
 		transformationGraphPath="xml_to_pojo.grf" doc:name="xml_to_pojo" />
 
 	<tcp:connector name="tcpConnector" receiveBufferSize="1024"
-		receiveBacklog="50"  reuseAddress="true"
-		clientSoTimeout="0" serverSoTimeout="0" socketSoLinger="0"
-		 keepAlive="true" doc:name="TCP connector">
-		<tcp:direct-protocol payloadOnly="true" rethrowExceptionOnRead="true" />
+		receiveBacklog="50" reuseAddress="true" clientSoTimeout="0"
+		serverSoTimeout="0" socketSoLinger="0" keepAlive="true" doc:name="TCP connector">
+		<tcp:direct-protocol payloadOnly="true"
+			rethrowExceptionOnRead="true" />
 	</tcp:connector>
+	<jdbc-ee:mysql-data-source name="MySQL_Data_Source"
+		user="mule" password="123senha" url="jdbc:mysql://10.211.55.5:3306/muledemo"
+		transactionIsolation="UNSPECIFIED" doc:name="MySQL Data Source" />
+	<jdbc-ee:connector name="MySQLDatabase"
+		dataSource-ref="MySQL_Data_Source" validateConnections="true"
+		queryTimeout="-1" pollingFrequency="0" doc:name="Database" />
 
-	<flow name="queued-proposals" doc:name="queued-proposals">
+	<flow name="queued-proposals" doc:name="queued-proposals"
+		processingStrategy="synchronous">
 
 		<jms:inbound-endpoint queue="financeIn"
 			connector-ref="jmsConnector" doc:name="JMS"
@@ -56,6 +65,8 @@ http://www.mulesoft.org/schema/mule/xml http://www.mulesoft.org/schema/mule/xml/
 			doc:name="Variable" />
 		<data-mapper:transform config-ref="csv_to_pojo"
 			doc:name="CSV To Pojo" />
+		<set-variable variableName="proposalId" value="#[payload.customerId]"
+			doc:name="Set proposalId" />
 		<logger message="What arrived: #[payload] and #[flowVars]"
 			level="INFO" doc:name="Logger" />
 		<cxf:jaxws-client wsdlLocation="classpath:/wsdl/fraudDetection.wsdl"
@@ -78,6 +89,8 @@ http://www.mulesoft.org/schema/mule/xml http://www.mulesoft.org/schema/mule/xml/
 			doc:name="XML To Pojo" />
 		<logger message="Response to call: #[payload.status]" level="INFO"
 			doc:name="Logger" />
+		<set-variable variableName="decision" value="#[payload.status]"
+			doc:name="Set decision" />
 		<choice doc:name="Choice" tracking:enable-default-events="true">
 			<when expression="payload.status == 'Approved'" evaluator="groovy">
 				<set-payload value="#[originalPayload]" doc:name="Set Payload"></set-payload>
@@ -87,15 +100,33 @@ http://www.mulesoft.org/schema/mule/xml http://www.mulesoft.org/schema/mule/xml/
 					responseTimeout="10000" doc:name="TCP"
 					tracking:enable-default-events="true">
 				</tcp:outbound-endpoint>
-                <byte-array-to-object-transformer doc:name="Byte Array to Object"/>
+				<byte-array-to-object-transformer
+					doc:name="Byte Array to Object" />
+				<set-variable variableName="amount" value="#[payload]"
+					doc:name="Set amount" />
 
 				<logger message="What? #[payload]" level="INFO" doc:name="Logger" />
+				<flow-ref name="create-response-flow" doc:name="Flow Reference" />
 			</when>
 			<otherwise>
-				<jms:outbound-endpoint queue=" financeOut"
-					connector-ref="jmsConnector" doc:name="JMS" />
+				<flow-ref name="create-response-flow" doc:name="Flow Reference" />
 			</otherwise>
 		</choice>
+        <catch-exception-strategy doc:name="Catch Exception Strategy">
+            <logger message="Excecao rolada: #[exception]" level="ERROR" doc:name="Logger"/>
+            <jdbc-ee:outbound-endpoint exchange-pattern="one-way" queryKey="insert_error" queryTimeout="-1" connector-ref="MySQLDatabase" doc:name="Database">
+                <jdbc-ee:query key="insert_error" value="INSERT INTO `muledemo`.`FAILED`(`payload`,`status`,`created_at`) VALUES (#[originalPayload], 'failed', NOW())"/>
+            </jdbc-ee:outbound-endpoint>
+        </catch-exception-strategy>
+	</flow>
+	<flow name="create-response-flow" doc:name="create-response-flow">
+        <set-variable variableName="proceededOk" value="true" doc:name="Remove var"/>
+		<custom-transformer
+			class="br.net.reichel.mock.transformer.ProposalResponseFactory"
+			doc:name="Java" />
+		<logger message="Final response to the Bank: #[payload]" level="INFO"
+			doc:name="Logger" />
+        <jms:outbound-endpoint queue="financeOut" connector-ref="jmsConnector" doc:name="JMS"/>
 	</flow>
 
 </mule>
